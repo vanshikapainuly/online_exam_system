@@ -1,0 +1,56 @@
+/* Styling for the Time Circles container */
+.time_circles {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* Styling for each circle element within the container */
+.time_circles > div {
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Styling for the h4 tag inside each circle */
+.time_circles > div > h4 {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    text-transform: uppercase;
+    font-family: 'Century Gothic', Arial, sans-serif;
+    font-size: 1.1em;
+    letter-spacing: 1px;
+    color: #333; /* Color for the text */
+}
+
+/* Styling for the span tag inside each circle (numbers or countdown) */
+.time_circles > div > span {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-family: 'Century Gothic', Arial, sans-serif;
+    font-size: 300%;
+    margin-top: 0.4em;
+    font-weight: bold;
+    color: #167ce6; /* Custom color for the countdown text */
+}
+
+/* Add some responsive adjustments */
+@media (max-width: 768px) {
+    .time_circles > div > span {
+        font-size: 200%; /* Reduce font size for smaller screens */
+    }
+
+    .time_circles > div > h4 {
+        font-size: 0.9em; /* Slightly reduce the size of the header on smaller screens */
+    }
+}
