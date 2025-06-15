@@ -7,7 +7,7 @@ CREATE TABLE `online_exam_enroll` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `exam_id` int(11) NOT NULL,
-  `attendance_status` enum('Absent','Present') NOT NULL
+  `attendance_status` enum('Absent','Present') DEFAULT 'Absent'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -22,7 +22,7 @@ CREATE TABLE `online_exam_exams` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `exam_title` varchar(250) NOT NULL,
-  `exam_datetime` datetime NOT NULL,
+  `exam_datetime` datetime DEFAULT NULL,
   `duration` varchar(30) NOT NULL,
   `total_question` int(5) NOT NULL,
   `marks_per_right_answer` varchar(30) NOT NULL,
@@ -174,58 +174,52 @@ INSERT INTO `online_exam_user` (`id`, `first_name`, `last_name`, `gender`, `emai
 (4, 'Rohit', 'Mehta', 'Male', 'user2@test.com', '202cb962ac59075b964b07152d234b70', '123456789', '', '2025-04-28 22:45:58', 'user'),
 (6, 'Sanjay', 'Singhania', 'Male', 'abcd@gmail.com', '202cb962ac59075b964b07152d234b70', '1234567890', 'dsdgsd', '2025-04-28 20:42:14', 'user');
 
-
-ALTER TABLE `online_exam_enroll`
+ALTER TABLE `online_exam_user`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7,
   ADD PRIMARY KEY (`id`);
-
 
 ALTER TABLE `online_exam_exams`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8,
   ADD PRIMARY KEY (`id`);
 
-
-ALTER TABLE `online_exam_option`
+ALTER TABLE `online_exam_enroll`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22,
   ADD PRIMARY KEY (`id`);
-
-
-ALTER TABLE `online_exam_process`
-  ADD PRIMARY KEY (`id`);
-
 
 ALTER TABLE `online_exam_question`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17,
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `online_exam_option`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49,
   ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `online_exam_question_answer`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122,
   ADD PRIMARY KEY (`id`);
-
-
-ALTER TABLE `online_exam_user`
-  ADD PRIMARY KEY (`id`);
-
-
-ALTER TABLE `online_exam_enroll`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
-
-
-ALTER TABLE `online_exam_exams`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
-
-ALTER TABLE `online_exam_option`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 ALTER TABLE `online_exam_process`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33,
+  ADD PRIMARY KEY (`id`);
 
+ALTER TABLE `online_exam_exams`
+  ADD CONSTRAINT `fk_user_exam` FOREIGN KEY (`user_id`) REFERENCES `online_exam_user`(`id`);
+
+ALTER TABLE `online_exam_enroll`
+  ADD CONSTRAINT `fk_enroll_user` FOREIGN KEY (`user_id`) REFERENCES `online_exam_user`(`id`),
+  ADD CONSTRAINT `fk_enroll_exam` FOREIGN KEY (`exam_id`) REFERENCES `online_exam_exams`(`id`);
 
 ALTER TABLE `online_exam_question`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  ADD CONSTRAINT `fk_question_exam` FOREIGN KEY (`exam_id`) REFERENCES `online_exam_exams`(`id`);
 
+ALTER TABLE `online_exam_option`
+  ADD CONSTRAINT `fk_option_question` FOREIGN KEY (`question_id`) REFERENCES `online_exam_question`(`id`);
 
 ALTER TABLE `online_exam_question_answer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
+  ADD CONSTRAINT `fk_answer_user` FOREIGN KEY (`user_id`) REFERENCES `online_exam_user`(`id`),
+  ADD CONSTRAINT `fk_answer_exam` FOREIGN KEY (`exam_id`) REFERENCES `online_exam_exams`(`id`),
+  ADD CONSTRAINT `fk_answer_question` FOREIGN KEY (`question_id`) REFERENCES `online_exam_question`(`id`);
 
-
-ALTER TABLE `online_exam_user`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-COMMIT;
-
+ALTER TABLE `online_exam_process`
+  ADD CONSTRAINT `fk_process_user` FOREIGN KEY (`user_id`) REFERENCES `online_exam_user`(`id`),
+  ADD CONSTRAINT `fk_process_exam` FOREIGN KEY (`exam_id`) REFERENCES `online_exam_exams`(`id`);
